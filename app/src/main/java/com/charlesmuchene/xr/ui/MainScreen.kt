@@ -10,7 +10,8 @@ import com.charlesmuchene.xr.ui.content.The2DContent
 fun MainScreen() {
     val spatialConfiguration = LocalSpatialConfiguration.current
 
-    if (LocalSpatialCapabilities.current.isSpatialUiEnabled) SpatialContent()
+    val spatialUiEnabled = LocalSpatialCapabilities.current.isSpatialUiEnabled
+    if (spatialUiEnabled) SpatialContent(spatialConfiguration::requestHomeSpaceMode)
     else The2DContent(onRequestFullSpaceMode = spatialConfiguration::requestFullSpaceMode)
 }
 

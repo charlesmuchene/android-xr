@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,9 +26,6 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-/**
- * "A320neo" (https://skfb.ly/oKTUt) by pranav27 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
- */
 @OptIn(ExperimentalSubspaceVolumeApi::class)
 @Composable
 fun Jetliner(modifier: SubspaceModifier = SubspaceModifier) {
@@ -38,7 +36,7 @@ fun Jetliner(modifier: SubspaceModifier = SubspaceModifier) {
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
-        animationSpec = infiniteRepeatable(tween(12_000)),
+        animationSpec = infiniteRepeatable(tween(durationMillis = 12_000, easing = LinearEasing)),
         label = "A320Angle"
     )
 
@@ -50,7 +48,7 @@ fun Jetliner(modifier: SubspaceModifier = SubspaceModifier) {
         val model = GltfModel.create(session, Paths.get("models", "a320neo.glb"))
         modelEntity = GltfModelEntity.create(session, model).apply {
             addComponent(MovableComponent.createSystemMovable(session))
-            setScale(0.3f)
+            setScale(0.2f)
         }
     }
 

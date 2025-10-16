@@ -4,7 +4,7 @@ Android XR project:
 
 > Jetliner in a holding pattern ✈️
 
-![Jetliner](./jetliner.png)
+![Jetliner](./media/jetliner.png)
 
 ## Attribution
 - "a320neo.glb": "A320neo" (https://skfb.ly/oKTUt) by pranav27 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).

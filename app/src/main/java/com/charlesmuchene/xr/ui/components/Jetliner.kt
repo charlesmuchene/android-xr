@@ -58,22 +58,22 @@ fun Jetliner(modifier: SubspaceModifier = SubspaceModifier) {
             val radians = angle * (PI.toFloat() / 180f)
 
             // Elliptical path
-            val radiusX = 12f
-            val radiusZ = 16f
+            val radiusX = 14f
+            val radiusZ = 12f
             val x = radiusX * cos(radians)
             val z = radiusZ * sin(radians)
 
             // Center the ellipse and add vertical hover
             val hover = sin(radians * 6) * 0.2f // Small, fast vertical oscillation
-            val position = Vector3(x, 2f + hover, z - 20f)
+            val position = Vector3(x, 6f + hover, z - 15f)
 
             // Calculate forward direction and bank
             val forwardX = -radiusX * sin(radians)
             val forwardZ = radiusZ * cos(radians)
             val forward = Vector3(forwardX, 0f, forwardZ).toNormalized()
 
-            // Bank based on the curvature of the path
-            val bankAngle = -cos(radians * 2) * 15f // Bank into turns
+            // Bank into the turn, varying between 15 and 25 degrees based on the path's curvature
+            val bankAngle = 20f + 5f * cos(radians * 2)
             val bank = Quaternion.fromAxisAngle(forward, bankAngle)
             val up = bank * Vector3.Up
 

@@ -1,10 +1,12 @@
-# Android XR
+# Jetliner XR
 
-Android XR project:
+An Android XR project:
 
 > Jetliner in a holding pattern ✈️
 
-![Jetliner](./media/jetliner.png)
+| Home Space Mode                            | Full Space Mode                     |
+|--------------------------------------------|-------------------------------------|
+| ![Home Space Mode](./media/home-space.png) | ![Jetliner](./media/full-space.mp4) |
 
 ## Attribution
 - "a320neo.glb": "A320neo" (https://skfb.ly/oKTUt) by pranav27 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).

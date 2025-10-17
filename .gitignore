@@ -20,3 +20,5 @@ captures/
 
 # Generated files
 lint-results-*.xml
+
+.kotlin/

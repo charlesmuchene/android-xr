@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">XR</string>
-    <string name="normal_is_not_boring">Android XR 😎</string>
+    <string name="app_name">Jetliner XR</string>
     <string name="switch_to_home_space_mode">Switch to Home Space Mode</string>
     <string name="switch_to_full_space_mode">Switch to Full Space Mode</string>
+    <string name="jetliner">jetliner</string>
+    <string name="main_button">Immerse yourself</string>
 </resources>

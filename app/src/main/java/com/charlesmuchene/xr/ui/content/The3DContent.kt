@@ -13,13 +13,17 @@ import com.charlesmuchene.xr.ui.components.Jetliner
 fun The3DContent() {
     Subspace {
         Jetliner()
+        SwapEnvironment()
+    }
+}
 
+@Composable
+private fun SwapEnvironment() {
+    if (LocalSpatialCapabilities.current.isAppEnvironmentEnabled) {
         val session = checkNotNull(LocalSession.current)
-        if (LocalSpatialCapabilities.current.isAppEnvironmentEnabled) {
-            LaunchedEffect(Unit) {
-                session.scene.spatialEnvironment.preferredSpatialEnvironment =
-                    ENV_OPTIONS[1].toSpatialEnvPref(session)
-            }
+        LaunchedEffect(Unit) {
+            session.scene.spatialEnvironment.preferredSpatialEnvironment =
+                ENV_OPTIONS[1].toSpatialEnvPref(session)
         }
     }
 }

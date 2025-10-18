@@ -10,7 +10,7 @@ import com.charlesmuchene.xr.env.ENV_OPTIONS
 import com.charlesmuchene.xr.ui.components.Jetliner
 
 @Composable
-fun SpatialContent() {
+fun The3DContent() {
     Subspace {
         Jetliner()
 

@@ -29,9 +29,28 @@ import kotlin.math.sin
 @OptIn(ExperimentalSubspaceVolumeApi::class)
 @Composable
 fun Jetliner(modifier: SubspaceModifier = SubspaceModifier) {
-    val session = checkNotNull(LocalSession.current)
+    val modelEntity = loadModelEntity()
 
-    // --- Animation Setup ---
+    AnimateModelEntity(modelEntity)
+
+    Volume(modifier = modifier) { parent ->
+        modelEntity?.let { it.parent = parent }
+    }
+}
+
+@Composable
+private fun AnimateModelEntity(modelEntity: GltfModelEntity?) {
+    val angle = animatedAngle()
+    LaunchedEffect(angle) {
+        modelEntity?.let { entity ->
+            val pose = calculatePose(angle)
+            entity.setPose(pose)
+        }
+    }
+}
+
+@Composable
+private fun animatedAngle(): Float {
     val infiniteTransition = rememberInfiniteTransition(label = "A320Transition")
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -39,11 +58,14 @@ fun Jetliner(modifier: SubspaceModifier = SubspaceModifier) {
         animationSpec = infiniteRepeatable(tween(durationMillis = 12_000, easing = LinearEasing)),
         label = "A320Angle"
     )
+    return angle
+}
 
-    // --- Model and Entity State ---
+@Composable
+private fun loadModelEntity(): GltfModelEntity? {
+    val session = checkNotNull(LocalSession.current)
     var modelEntity by remember { mutableStateOf<GltfModelEntity?>(null) }
 
-    // --- Model Loading and Entity Creation (runs only once) ---
     LaunchedEffect(Unit) {
         val model = GltfModel.create(session, Paths.get("models", "a320neo.glb"))
         modelEntity = GltfModelEntity.create(session, model).apply {
@@ -51,40 +73,32 @@ fun Jetliner(modifier: SubspaceModifier = SubspaceModifier) {
             setScale(0.2f)
         }
     }
+    return modelEntity
+}
 
-    // --- Pose Updates on Animation Change ---
-    LaunchedEffect(angle) {
-        modelEntity?.let { entity ->
-            val radians = angle * (PI.toFloat() / 180f)
+private fun calculatePose(angle: Float): Pose {
+    val radians = angle * (PI.toFloat() / 180f)
 
-            // Elliptical path
-            val radiusX = 14f
-            val radiusZ = 12f
-            val x = radiusX * cos(radians)
-            val z = radiusZ * sin(radians)
+    // Elliptical path
+    val radiusX = 14f
+    val radiusZ = 12f
+    val x = radiusX * cos(radians)
+    val z = radiusZ * sin(radians)
 
-            // Center the ellipse and add vertical hover
-            val hover = sin(radians * 6) * 0.2f // Small, fast vertical oscillation
-            val position = Vector3(x, 6f + hover, z - 15f)
+    // Center the ellipse and add vertical hover
+    val hover = sin(radians * 6) * 0.2f // Small, fast vertical oscillation
+    val position = Vector3(x, 6f + hover, z - 15f)
 
-            // Calculate forward direction and bank
-            val forwardX = -radiusX * sin(radians)
-            val forwardZ = radiusZ * cos(radians)
-            val forward = Vector3(forwardX, 0f, forwardZ).toNormalized()
+    // Calculate forward direction and bank
+    val forwardX = -radiusX * sin(radians)
+    val forwardZ = radiusZ * cos(radians)
+    val forward = Vector3(forwardX, 0f, forwardZ).toNormalized()
 
-            // Bank into the turn, varying between 15 and 25 degrees based on the path's curvature
-            val bankAngle = 20f + 5f * cos(radians * 2)
-            val bank = Quaternion.fromAxisAngle(forward, bankAngle)
-            val up = bank * Vector3.Up
+    // Bank into the turn, varying between 15 and 25 degrees based on the path's curvature
+    val bankAngle = 20f + 5f * cos(radians * 2)
+    val bank = Quaternion.fromAxisAngle(forward, bankAngle)
+    val up = bank * Vector3.Up
 
-            val orientation = Quaternion.fromLookTowards(forward, up)
-            val pose = Pose(position, orientation)
-            entity.setPose(pose)
-        }
-    }
-
-    // --- Scene Graph Placement ---
-    Volume(modifier = modifier) { parent ->
-        modelEntity?.let { it.parent = parent }
-    }
+    val orientation = Quaternion.fromLookTowards(forward, up)
+    return Pose(translation = position, rotation = orientation)
 }
